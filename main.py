@@ -1,16 +1,36 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+from swapi import Swapi
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def get_film_info(film_id):
+    swapi = Swapi()
+    film = swapi.get_film(film_id)
+    if not film:
+        print("Фільм з вказаним ідентифікатором не знайдено.")
+        return
+
+    print(f"Фільм: {film.title}")
+
+    print("Персонажі:")
+    for character in film.characters:
+        character_info = swapi.get_person(character.split('/')[-2])
+        print(f" {character_info.name} з планети {swapi.get_planet(character_info.homeworld.split('/')[-2]).name}")
+
+    print("Транспортні засоби:")
+    for vehicle in film.vehicles:
+        vehicle_info = swapi.get_vehicle(vehicle.split('/')[-2])
+        print(f" {vehicle_info.name}")
+
+    print("Космічні кораблі:")
+    for starship in film.starships:
+        starship_info = swapi.get_starship(starship.split('/')[-2])
+        print(f" {starship_info.name}")
+
+    print("Види істот:")
+    for species in film.species:
+        species_info = swapi.get_species(species.split('/')[-2])
+        print(f" {species_info.name}")
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+if name == "__main__":
+    film_id = input("Введіть ідентифікатор фільму: ")
+    get_film_info(int(film_id))
